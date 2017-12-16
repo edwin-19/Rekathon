@@ -26,17 +26,49 @@ def intializeLog():
 def mainpage():
     return render_template("index.html")
 
-@app.route("/getData")
-def getData():
+@app.route("/getTemp")
+def getTemp():
     temperature = request.args.get('temperature', default=0.0, type=float)
-    humidity = request.args.get('humidity', default=0.0, type=float)
-    soil = request.args.get('soil', default=0, type=float)
 
     db = 'database/myDB.db'
     con = dbhelper.create_connection(db)
 
     with con:
         data = [time() * 1000, temperature]
+        # lastid = dbhelper.insertData(con, data)
+        response = jsonify(data)
+        response.content_type = 'application/json'
+
+        # print(lastid)
+
+    return response
+
+@app.route("/getHumidity")
+def getHumidity():
+    humidity = request.args.get('humidity', default=0.0, type=float)
+
+    db = 'database/myDB.db'
+    con = dbhelper.create_connection(db)
+
+    with con:
+        data = [time() * 1000, humidity]
+        # lastid = dbhelper.insertData(con, data)
+        response = jsonify(data)
+        response.content_type = 'application/json'
+
+        # print(lastid)
+
+    return response
+
+@app.route("/getSoil")
+def getSoil():
+    soil = request.args.get('soil', default=0, type=float)
+
+    db = 'database/myDB.db'
+    con = dbhelper.create_connection(db)
+
+    with con:
+        data = [time() * 1000, soil]
         # lastid = dbhelper.insertData(con, data)
         response = jsonify(data)
         response.content_type = 'application/json'
