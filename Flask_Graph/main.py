@@ -36,12 +36,14 @@ def getData():
     con = dbhelper.create_connection(db)
 
     with con:
-        data = (temperature, humidity, soil)
-        lastid = dbhelper.insertData(con, data)
+        data = [time() * 1000, temperature]
+        # lastid = dbhelper.insertData(con, data)
+        response = jsonify(data)
+        response.content_type = 'application/json'
 
-        print(lastid)
+        # print(lastid)
 
-    return "SUCESS"
+    return response
 
 
 @app.route("/liveCharts")
@@ -59,6 +61,7 @@ def live_data():
        response.content_type = 'application/json'
 
     return response
+
 
 @app.errorhandler(404)
 def exceptions(e):

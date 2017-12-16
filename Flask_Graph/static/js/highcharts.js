@@ -6,7 +6,7 @@ var chart;
  */
 function requestData() {
     $.ajax({
-        url: '/live-data',
+        url: '/getData?temperature=10.20&humidity=20.20&soil=20',
         success: function(point) {
             var series = chart.series[0],
                 shift = series.data.length > 20; // shift if the series is
