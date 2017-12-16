@@ -5,6 +5,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from time import strftime
 import traceback
+import dbhelper
 
 app = Flask(__name__)
 
@@ -56,4 +57,5 @@ def exceptions(e):
 
 if __name__ == '__main__':
     intializeLog()
+    dbhelper.createTable()
     app.run(debug=True, port=5000)
