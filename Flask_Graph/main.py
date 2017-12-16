@@ -26,10 +26,23 @@ def intializeLog():
 def mainpage():
     return render_template("index.html")
 
-@app.route("/getMessage")
-def getMethod():
-    query = request.args.get('message', default='', type=str)
-    return query
+@app.route("/getData")
+def getData():
+    temperature = request.args.get('temperature', default=0.0, type=float)
+    humidity = request.args.get('humidity', default=0.0, type=float)
+    soil = request.args.get('soil', default=0, type=float)
+
+    db = 'database/myDB.db'
+    con = dbhelper.create_connection(db)
+
+    with con:
+        data = (temperature, humidity, soil)
+        lastid = dbhelper.insertData(con, data)
+
+        print(lastid)
+
+    return "SUCESS"
+
 
 @app.route("/liveCharts")
 def livecharts():
@@ -37,9 +50,14 @@ def livecharts():
 
 @app.route("/live-data")
 def live_data():
-    data = [time() * 1000, random() * 100]
-    response = jsonify(data)
-    response.content_type = 'application/json'
+    db = 'database/myDB.db'
+    con = dbhelper.create_connection(db)
+
+    with con:
+       data = [time() * 1000, random() * 100]
+       response = jsonify(data)
+       response.content_type = 'application/json'
+
     return response
 
 @app.errorhandler(404)
@@ -57,5 +75,4 @@ def exceptions(e):
 
 if __name__ == '__main__':
     intializeLog()
-    #dbhelper.createTable()
     app.run(debug=True, port=5000)

@@ -1,39 +1,29 @@
-import sqlite3 as sql
-import sys
-from sqlite3 import *
+import sqlite3
+from sqlite3 import Error
 
-db = "database/myDB.db"
-
-def openDB():
+def create_connection(db_file):
     try:
-        conn = sql.connect(db)
-    except:
-        print("Error open db.\n")
-        return False
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
 
-    curr = conn.cursor()
-    return [conn, curr]
+    return None
 
-def createTable():
-    openDB()
-    conn = sql.connect(db)
 
-    if not checkTableExists(conn, tablename="MYDATA"):
-        conn.execute(" CREATE TABLE MYDATA( ID INTEGER PRIMARY KEY AUTOINCREMENT, HUMIDITY INTEGER NOT NULL, AGE INT NOT NULL, ADDRESS CHAR(50),SALARY REAL); ")
-        conn.commit()
-    else:
-        print("TABLE EXISTS")
+def select_all_task(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM DATA")
 
-def checkTableExists(dbconn, tablename):
-    dbcur = dbconn.cursor()
-    dbcur.execute("""
-            SELECT COUNT(*)
-            FROM information_schema.tables
-            WHERE table_name = '{0}'
-            """.format(tablename.replace('\'', '\'\'')))
-    if dbcur.fetchone()[0] == 1:
-        dbcur.close()
-        return True
+    rows = cur.fetchall()
 
-    dbcur.close()
-    return False
+    for row in rows:
+        print(row[0])
+
+def insertData(conn,data):
+    sql = ''' INSERT INTO DATA(Temperature,Humidity,Soil)
+                  VALUES(?,?,?) '''
+
+    cur = conn.cursor()
+    cur.execute(sql, data)
+    return cur.lastrowid
