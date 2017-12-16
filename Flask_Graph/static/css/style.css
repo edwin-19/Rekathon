@@ -31,3 +31,11 @@ p {
 ul {
     font-size: 17px;
 }
+
+.chart {
+    height: 200px;
+}
+
+.spacer {
+    height: 20px;
+}
