@@ -57,5 +57,5 @@ def exceptions(e):
 
 if __name__ == '__main__':
     intializeLog()
-    dbhelper.createTable()
+    #dbhelper.createTable()
     app.run(debug=True, port=5000)
